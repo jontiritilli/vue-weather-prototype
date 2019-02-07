@@ -9,7 +9,6 @@
     { "src": ".*", "dest": "/index.html" }
   ],
   "scripts": {
-    ...
     "build": "vue-cli-service build",
     "now-build": "vue-cli-service build"
   },
