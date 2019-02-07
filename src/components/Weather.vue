@@ -17,13 +17,18 @@
         </b-input-group>
       </b-form>
       <hr class="my-4">
-      <div class="col" v-if="!forecastedRain.length && dataReceived">
+      <div class="col" v-if="!errors.length && !forecastedRain.length && success">
         <h1 class='display-4'>Go ahead and wash your car</h1>
         <h3>It's NOT gonna rain</h3>
       </div>
-      <div class="col" v-if="forecastedRain.length">
+      <div class="col" v-if="!errors.length && forecastedRain.length">
         <h1 class='display-4'>Don't wash your car</h1>
         <h3>It's definitely gonna rain</h3>
+      </div>
+      <div class="col" v-if="errors.length">
+        <h1 class='display-4'>Error</h1>
+        <h3 v-for="(error, i) in errors" :key="i">{{i}}: {{error}}</h3>
+        <h3>Check that Zip Code one more time...</h3>
       </div>
     </b-jumbotron>
   </div>
@@ -44,12 +49,13 @@ export default {
   },
   data() {
     return {
-      dataReceived: false,
+      success: false,
       zip: '',
       weatherData: {},
       currentWeather: {},
       forecastedRain: [],
       city: {},
+      errors: [],
     }
   },
   name: 'Weather',
@@ -58,20 +64,20 @@ export default {
   },
   methods: {
     handleSubmit() {
-      if (this.zip.length < 5) return;
+      if (!this.isValidZip) return;
       const requestString = `https://api.openweathermap.org/data/2.5/forecast?zip=${this.zip}&cluster=yes&format=json&units=imperial&APPID=${weatherApiKey}`;
       // get the weather data and save the components we need
       axios.get(requestString)
         .then(res => {
-          this.dataReceived = true;
+          this.errors = [];
+          this.success = true;
           this.city = res.data.city;
           this.currentWeather = res.data.list[0];
           this.weatherData = res.data.list;
           this.forecastedRain = res.data.list.map(d => d.weather).filter(w => w[0].main === "Rain")
         })
         .catch(err => {
-          // eslint-disable-next-line
-          console.log(err);
+          this.errors.push(err);
         })
       }
   }
