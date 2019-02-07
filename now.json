@@ -7,9 +7,5 @@
     { "src": "^/css/(.*)", "dest": "/css/$1" },
     { "src": "^/img/(.*)", "dest": "/img/$1" },
     { "src": ".*", "dest": "/index.html" }
-  ],
-  "scripts": {
-    "build": "vue-cli-service build",
-    "now-build": "vue-cli-service build"
-  },
+  ]
 }
