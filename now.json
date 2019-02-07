@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "my-vue-project",
+  "name": "vue-weather-prototype",
   "builds": [{ "src": "package.json", "use": "@now/static-build" }],
   "routes": [
     { "src": "^/js/(.*)", "dest": "/js/$1" },
